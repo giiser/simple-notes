@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const NoteForm = () => {
+const NoteForm = ({notes, setNotes}) => {
     // const [title, setTitle] = useState('');
     // const [priority, setPriority] = useState('Medium');
     // const [category, setCategory] = useState('Work');
@@ -17,8 +17,30 @@ const NoteForm = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        //title and description are mandatory
+        if (!formData.title || !formData.description) {
+            return;
+        }
+
+        //create Note object
+        const newNote = {id: Date.now(), ...formData};
+
+        //add notes to state
+        setNotes([newNote, ...notes]);
+
+        //reset form
+        setFormData({
+            title: '',
+            category: 'Work',
+            priority: 'Medium',
+            description: ''
+        })
+    }
+
     return (
-        <form className={'mb-6'}>
+        <form onSubmit={handleSubmit} className={'mb-6'}>
             <div className="mb-4">
                 <label htmlFor="title" className="block font-semibold">Title</label>
                 <input
@@ -26,8 +48,7 @@ const NoteForm = () => {
                     type="text"
                     className="w-full p-2 border rounded-lg"
                     value={formData.title}
-                    onChange={handleChange}
-                />
+                    onChange={handleChange}/>
             </div>
             <div className="mb-4">
                 <label htmlFor="priority" className="block font-semibold">Priority</label>
@@ -35,8 +56,7 @@ const NoteForm = () => {
                     name="priority"
                     className="w-full p-2 border rounded-lg"
                     value={formData.priority}
-                    onChange={handleChange}
-                >
+                    onChange={handleChange}>
                     <option value="High">🔴 High</option>
                     <option value="Medium">🟡 Medium</option>
                     <option value="Low">🟢 Low</option>
@@ -48,8 +68,7 @@ const NoteForm = () => {
                     name="category"
                     className="w-full p-2 border rounded-lg"
                     value={formData.category}
-                    onChange={handleChange}
-                    >
+                    onChange={handleChange}>
                     <option value="Work">💼 Work</option>
                     <option value="Study">📚 Study</option>
                     <option value="Personal">📃Personal</option>
@@ -62,8 +81,8 @@ const NoteForm = () => {
                     name="description"
                     className="w-full p-2 border rounded-lg"
                     value={formData.description}
-                    onChange={handleChange}
-                ></textarea>
+                    onChange={handleChange}>
+                </textarea>
             </div>
             <button className="w-full bg-purple-500 text-white py-2 rounded-lg cursor-pointer hover:bg-purple-600">Add Note</button>
         </form>
