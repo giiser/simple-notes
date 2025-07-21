@@ -1,9 +1,11 @@
 const NoteList = ({notes}) => {
 
     if(notes.length === 0){
-        <p className="text-center text-gray-500">
-            No notes found.
-        </p>
+        return (
+            <p className="text-center text-gray-500">
+                No notes found.
+            </p>
+            );
     }
 
     return (
